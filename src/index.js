@@ -1,12 +1,18 @@
+/* eslint-disable no-unused-vars */
 const express = require('express');
 
 const app = express();
 const port = 3000;
 const bodyParser = require('body-parser');
+const db = require('./connection');
 
 app.use(bodyParser.json());
 // Route
 app.get('/', (req, res) => {
+  // eslint-disable-next-line space-in-parens
+  db.query('SELECT * FROM student', ( error, result ) => {
+    console.log(result);
+  });
   res.send('Utama');
 });
 
