@@ -102,6 +102,21 @@ app.put('/student', (req, res) => {
 
 // DELETE
 // Delete data
+app.delete('/student', (req, res) => {
+  const { id } = req.body;
+  const sql = `DELETE FROM student WHERE id = ${id}`;
+  db.query(sql, (error, result) => {
+    if (error) response(500, 'Server', 'error', res);
+    if (result?.affectedRows) {
+      const data = {
+        isDeleted: result.affectedRows,
+      };
+      response(200, data, 'Delete Data Success', res);
+    } else {
+      response(404, 'Not found', 'error', res);
+    }
+  });
+});
 
 // Server
 app.listen(port, () => {
