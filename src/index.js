@@ -62,15 +62,46 @@ app.post('/student', (req, res) => {
     address,
     faculty,
   } = req.body;
-  const sql = `INSERT INTO student (id, name, email, address, faculty) VALUES (${id}, '${name}', '${email}', '${address}', '${faculty}')`;
+  const sql = `INSERT INTO student (id, name, email, address, faculty) 
+               VALUES (${id}, '${name}', '${email}', '${address}', '${faculty}')`;
   db.query(sql, (error, result) => {
-    if (error) throw error;
+    if (error) response(400, 'Invalid', 'Error', res);
     // console.log({ f: result.affectedows });
-    if (result.affectedRows) {
-      response(200, result.insertId, 'Data added success', res);
+    const data = {
+      isSuccess: result.affectedRows,
+      id: result.insertId,
+    };
+    if (result?.affectedRows) {
+      response(200, data, 'Data added success', res);
     }
   });
 });
+
+// PUT
+// Edit data
+app.put('/student', (req, res) => {
+  const {
+    id,
+    name,
+    email,
+    address,
+    faculty,
+  } = req.body;
+  const sql = `UPDATE student SET name = '${name}', email = '${email}', address = '${address}', faculty = '${faculty}' WHERE id = ${id}`;
+  db.query(sql, (error, result) => {
+    if (error) response(400, 'Fail', 'error', res);
+    if (result?.affectedRows) {
+      const data = {
+        isSuccess: result.affectedRows,
+        id: result.insertId,
+      };
+      response(200, data, 'Update Data Success', res);
+    }
+  });
+});
+
+// DELETE
+// Delete data
 
 // Server
 app.listen(port, () => {
